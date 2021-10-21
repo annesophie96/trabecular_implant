@@ -2,3 +2,6 @@
 out/step/BAM_sDGlued.step
 out/step/BAM_sDFinal.step
 out/step/BAM_sDwImplCut.step
+*.step
+*.SLDPRT
+*.step

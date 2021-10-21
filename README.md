@@ -14,20 +14,24 @@ I recommend using Anaconda and JupyterLab. Make sure the prerequisites are insta
 Clone this repository, and the setup is complete.
 
 ## Folder structure
-You can find the Python notebooks under /src/python, any implants you might want to use, you can put to /src/implants. Output .step files will be generated in /out/step.
+You can find the Python notebook under /src/python. Output .step files will be generated in /out/step.
 
 ## Usage
-Open generateStructure_final_v1.ipynb. In field **#11**, fill out the first 7 parameters with your desired values:
+Open generateStructure_final_v3.ipynb. In field **#11**, fill out the first 9 or 10 parameters with the desired values:
 
 ```python
 # DATA
-VF=0.14      #Volume Fraction
-a0=0.625     #[mm] Average Cell Size / 2
-L=20         #[mm] Length (x) of Sample
-T=20         #[mm] Width (y) of Sample
-U=20         #[mm] Height (z) of Sample
-holeDiam=2.7 #[mm] Diameter of Drilled Hole
-dImpl=3.8    #[mm] Greatest Outer Diameter of the Implant
+VF=0.27         #Volume Fraction
+minCellSize=0.5 #[mm] Minimum Cell Size
+maxCellSize=1.0 #[mm] Maximum Cell Size
+L=10            #[mm] Min Length (x) of Sample
+T=10            #[mm] Min Width (y) of Sample
+U=12            #[mm] Min Height (z) of Sample
+holeDiam=2.7    #[mm] Diameter of Drilled Hole
+dImpl=3.8       #[mm] Greatest Outer Diameter of the Implant
+
+isotropicTestBodyGen=0 #turn 1 for isotropic test body generation, 0 for regular run
+numberOfLayers=5       #control test body size, no need to change
 ```
 In field **#6** under the 'else' case, you can substitute your own code for changing the local volume fracion of the material. You could even call the X and Y values instead of only R _(remembering to change the function call arguments within the main code as well)_, thus creating 2D functions for anisotropy.
 
@@ -40,11 +44,6 @@ def densify(R,VF,d):
         else:
             volFrac[i]=np.exp(-0.4*(R[i]-d/2)+np.log(1-VF))+VF
     return volFrac
-```
-In field **#36**, you will want to substitute the implant model's filename for your own implant model's filename, and change the implant's neck height (aka. how much it should be sticking out of the top) as needed:
-```python
-implant=cq.importers.importStep(home+'\\src\\implants\\your_implant.step')
-implNeckHeight=1.5 #[mm]
 ```
 
 The code exports the created models in multiple places, so that if you experience a crash or some other mishap, you can continue from where you left off. **Please note that this code can be quite time-consuming to finish running, as the subtractions and additions performed on the CAD models can get quite complex.**
