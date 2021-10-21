@@ -1,6 +1,0 @@
-plotly			https://github.com/plotly/plotly.py
-jupyter-cadquery	https://github.com/bernhard-42/jupyter-cadquery
-tqdm			https://github.com/tqdm/tqdm				included with Anaconda
-numpy			https://numpy.org/install/				included with Anaconda
-matplotlib		https://matplotlib.org/stable/users/installing.html	included with Anaconda
-ipython			https://ipython.org/install.html			included with Anaconda
