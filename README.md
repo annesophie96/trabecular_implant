@@ -14,35 +14,25 @@ I recommend using Anaconda and JupyterLab. Make sure the prerequisites are insta
 Clone this repository, and the setup is complete.
 
 ## Folder structure
-You can find the Python notebook under /src/python. Output .step files will be generated in /out/step.
+You can find the Python notebook under /src/python. Output .step files will be generated in /out/step. Input .csv file can be found under /src/csv.
 
 ## Usage
-Open generateStructure_final_v3.ipynb. In field **#11**, fill out the first 9 or 10 parameters with the desired values:
+Open src/csv/inputData.csv and set your parameters (structure name, base volume fraction, minimum cell size in mm, maximum cell size in mm, width, depth and height of structure in mm, whether to create an isotropic body or a compacted one, the maximum implant diameter, the pre-drill hole diameter and the width of the compacted region - if applicable). Save and close.
+Open generateStructure_final_v4.ipynb and run all.
+In field **#6** under the 'for' loop, you can substitute your own code for changing the local volume fracion of the material. You could even call the X and Y values instead of only R _(remembering to change the function call arguments within the main code as well)_, thus creating 2D functions for anisotropy.
 
 ```python
-# DATA
-VF=0.27         #Volume Fraction
-minCellSize=0.5 #[mm] Minimum Cell Size
-maxCellSize=1.0 #[mm] Maximum Cell Size
-L=10            #[mm] Min Length (x) of Sample
-T=10            #[mm] Min Width (y) of Sample
-U=12            #[mm] Min Height (z) of Sample
-holeDiam=2.7    #[mm] Diameter of Drilled Hole
-dImpl=3.8       #[mm] Greatest Outer Diameter of the Implant
-
-isotropicTestBodyGen=0 #turn 1 for isotropic test body generation, 0 for regular run
-numberOfLayers=5       #control test body size, no need to change
-```
-In field **#6** under the 'else' case, you can substitute your own code for changing the local volume fracion of the material. You could even call the X and Y values instead of only R _(remembering to change the function call arguments within the main code as well)_, thus creating 2D functions for anisotropy.
-
-```python
-def densify(R,VF,d):
+def densify(R,VF,d,v):
     volFrac=np.ones(len(R))
     for i in range(len(R)):
         if R[i]<=(d/2):
             volFrac[i]=1
+        elif (R[i]>=(d/2) and R[i]<=(d/2+v)):
+            volFrac[i]=((VF-1)*pow(v,-3)*(-2*pow(R[i],3)+3*(d+v)*pow(
+            R[i],2)-((3*d*(d+2*v))/2)*R[i]+((pow(d,2)*(d+3*v))/4))+1)
         else:
-            volFrac[i]=np.exp(-0.4*(R[i]-d/2)+np.log(1-VF))+VF
+            volFrac[i]=VF
+
     return volFrac
 ```
 
